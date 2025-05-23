@@ -182,7 +182,13 @@ export const Tracker = ({
                       scrollHeight="800px"
                     >
                       <Column selectionMode="multiple" style={{width: '5%' }}></Column>
-                      <Column style={{ width: '20%' }} field="wikiLink" header="Task" body={(rowData) => WikiLink(rowData)}></Column>
+                      <Column
+                        style={{ width: '20%' }}
+                        field="wikiLink"
+                        header="Task"
+                        filter filterPlaceholder="Search by name"
+                        body={(rowData) => WikiLink(rowData)}
+                      ></Column>
                       <Column style={{ width: '20%' }} field="objectives" header="" body={(rowData) => NeededItemsColumn(rowData)}></Column>
                       <Column style={{ width: '20%' }} field="lightkeeperRequired" header="" body={(rowData) => LightKeeperColumn(rowData)}></Column>
                       <Column style={{ width: '20%' }} field="kappaRequired" header="" body={(rowData) => KappaColumn(rowData)}></Column>
