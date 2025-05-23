@@ -30,7 +30,7 @@ export const Tabs = ({
       activeIndex={activeIndex}
       onTabChange={(e) => {
         setActiveIndex(e.index);
-        setTaskName(''); // clear search on tab change
+        setTaskName('');
       }}
     >
       {

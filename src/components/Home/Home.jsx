@@ -47,12 +47,12 @@ export const Home = () => {
   }
 
   return (
-    <div className='relative'>
+    <div className='relative container'>
       <div className='navbar'>
         <div className="img-container">
           <img src={logo} alt="Track My Kappa" />
         </div>
-        <div className="reload-button">
+        <div className="reload-button ml-2">
           <Button
             icon="pi pi-refresh"
             rounded

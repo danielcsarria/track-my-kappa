@@ -8,6 +8,9 @@ body {
   margin: 0;
 }
 
+.container {
+  min-height: 75vh;
+}
 .navbar {
   padding: 40px 20px 0;
   display: flex;
