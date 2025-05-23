@@ -1,0 +1,40 @@
+.p-orderlist-controls {
+  display: none;
+}
+
+.container {
+  padding: 0 20px;
+}
+
+img {
+  width: 100%;
+}
+
+.kappa-item {
+  max-width: 50px;
+}
+
+.item {
+  cursor: pointer;
+}
+
+.item.active {
+  background-color: #008001;
+}
+
+.loader-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.wipe-button {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+}
