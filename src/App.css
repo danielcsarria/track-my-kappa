@@ -33,8 +33,15 @@ img {
   justify-content: center;
 }
 
-.wipe-button {
-  position: absolute;
-  bottom: 20px;
-  right: 20px;
+.items-container {
+  margin-top: 56.5px;
+}
+
+.footer {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px;
+  margin-top: 50px;
 }

@@ -7,3 +7,23 @@ body {
   padding: 0;
   margin: 0;
 }
+
+.navbar {
+  padding: 40px 20px 0;
+  display: flex;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar img {
+  max-width: 200px;
+}
+
+.navbar .reload-button {
+  justify-self: flex-end;
+}
+
+.center {
+  text-align: center;
+}

@@ -1,13 +1,8 @@
-import { Column } from 'primereact/column';
-import { DataTable } from 'primereact/datatable';
-import { TabPanel, TabView } from 'primereact/tabview';
-import { useEffect, useState } from "react";
-import { Items } from "../Items/Items";
-import { ProgressBar } from 'primereact/progressbar';
-import { InputSwitch } from 'primereact/inputswitch';
-import { Collector } from '../Collector/Collector';
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
+import { useEffect, useState } from "react";
+import { ItemsContainer } from './ItemsContainer/Items';
+import { Tabs } from './Tabs/Tabs';
         
 export const Tracker = ({
   tasks
@@ -67,7 +62,6 @@ export const Tracker = ({
     setTraders(traders);
   }
 
-
   function loadSelectedTasks() {
     const data = localStorage.getItem('selectedTasks');
 
@@ -78,6 +72,20 @@ export const Tracker = ({
     } catch {
       return null;
     }
+  }
+
+  function kappaProgress(completedTasks) {
+    const totalKappaTasks = tasks.filter((task) => task.kappaRequired)?.length;
+    const totalCompletedKappaTasks = completedTasks.filter((task) => task.kappaRequired)?.length;
+    const percentageCompleted = (totalCompletedKappaTasks / totalKappaTasks) * 100
+
+    setKappaCompletion(percentageCompleted)
+  }
+
+  function handleItemsButtonClick(items) {
+    console.log('items', items)
+    setItemsDialogVisible(true)
+    setSelectedQuestItems(items)
   }
 
   const WikiLink = (rowData) => {
@@ -96,12 +104,6 @@ export const Tracker = ({
     return (
       rowData.lightkeeperRequired ? <span style={{color: '#b14e46'}}>LightKeeper</span> : null
     )
-  }
-
-  function handleItemsButtonClick(items) {
-    console.log('items', items)
-    setItemsDialogVisible(true)
-    setSelectedQuestItems(items)
   }
 
   const NeededItemsColumn = ({ objectives }) => {
@@ -135,98 +137,45 @@ export const Tracker = ({
     );
   };
 
-  function kappaProgress(completedTasks) {
-    const totalKappaTasks = tasks.filter((task) => task.kappaRequired)?.length;
-    const totalCompletedKappaTasks = completedTasks.filter((task) => task.kappaRequired)?.length;
-    const percentageCompleted = (totalCompletedKappaTasks / totalKappaTasks) * 100
-
-    setKappaCompletion(percentageCompleted)
-  }
-
-
   return (
     <div>
       <div className="grid mt-5 card">
         <div className="lg:col-8 md:col-12 card">
-          <TabView scrollable>
-            {
-              traders.map((trader, index) => {
-
-                let traderTasks = tasks.filter((task) => task.trader.name === trader);
-
-                if (onlyKappa) {
-                  traderTasks = traderTasks.filter((task) => task.kappaRequired);
-                }
-
-                if (onlyLightKeeper) {
-                  traderTasks = traderTasks.filter((task) => task.lightkeeperRequired);
-                }
-
-                if (hideComplete && selectedTasks) {
-                  const completedTaskIds = new Set(selectedTasks.map((t) => t.id));
-                  traderTasks = traderTasks.filter((task) => !completedTaskIds.has(task.id));
-                }
-
-                return (
-                  <TabPanel
-                    key={index}
-                    header={trader}
-                  >
-                    <DataTable
-                      selection={selectedTasks}
-                      onSelectionChange={(e) => handleSelectTask(e.value)} dataKey="id"
-                      tableStyle={{ minWidth: '50rem' }}
-                      value={traderTasks}
-                      showSelectAll={false}
-                      scrollable
-                      scrollHeight="800px"
-                    >
-                      <Column selectionMode="multiple" style={{width: '5%' }}></Column>
-                      <Column
-                        style={{ width: '20%' }}
-                        field="wikiLink"
-                        header="Task"
-                        filter filterPlaceholder="Search by name"
-                        body={(rowData) => WikiLink(rowData)}
-                      ></Column>
-                      <Column style={{ width: '20%' }} field="objectives" header="" body={(rowData) => NeededItemsColumn(rowData)}></Column>
-                      <Column style={{ width: '20%' }} field="lightkeeperRequired" header="" body={(rowData) => LightKeeperColumn(rowData)}></Column>
-                      <Column style={{ width: '20%' }} field="kappaRequired" header="" body={(rowData) => KappaColumn(rowData)}></Column>
-                    </DataTable>
-                  </TabPanel>
-                )
-              })
-            }
-            <TabPanel
-              header='Collector'
-            >
-              <Collector collector={tasks.find((task) => task.name === 'Collector')} />
-            </TabPanel>
-          </TabView>
+          <Tabs
+            traders={traders}
+            onlyKappa={onlyKappa}
+            onlyLightKeeper={onlyLightKeeper}
+            hideComplete={hideComplete}
+            selectedTasks={selectedTasks}
+            handleSelectTask={handleSelectTask}
+            wikiLink={WikiLink}
+            neededItemsColumn={NeededItemsColumn}
+            lightKeeperColumn={LightKeeperColumn}
+            kappaColumn={KappaColumn}
+            tasks={tasks}
+          />
         </div>
         <div className="lg:col-4 md:col-12">
-          <Items
+          <ItemsContainer
             tasks={tasks}
-            completedTasks={selectedTasks}
-            style={{marginTop: '55px'}}
+            selectedTasks={selectedTasks}
+            kappaCompletion={kappaCompletion}
+            onlyKappa={onlyKappa}
+            onlyLightKeeper={onlyLightKeeper}
+            hideComplete={hideComplete}
+            setOnlyKappa={setOnlyKappa}
+            setOnlyLightkeeper={setOnlyLightkeeper}
+            setHideComplete={setHideComplete}
           />
-          <div className='mt-3 mb-3'>
-            Kappa Progress: {kappaCompletion.toFixed(2)}% <ProgressBar value={kappaCompletion.toFixed(2)} />
-          </div>
-          <div className='flex align-items-center gap-4'>
-            <div className='flex align-items-center gap-2'>
-              <InputSwitch checked={onlyKappa} onChange={(e) => setOnlyKappa(e.value)} />Only Kappa
-            </div>
-            <div className='flex align-items-center gap-2'>
-              <InputSwitch checked={onlyLightKeeper} onChange={(e) => setOnlyLightkeeper(e.value)} />Only Lightkeeper
-            </div>
-            <div className='flex align-items-center gap-2'>
-              <InputSwitch checked={hideComplete} onChange={(e) => setHideComplete(e.value)} />Hide Complete
-            </div>
-          </div>
         </div>
       </div>
-      <Dialog header="Required FIR Items" visible={itemsDialogVisible} style={{ width: '50vw' }} onHide={() => {if (!itemsDialogVisible) return; setItemsDialogVisible(false); }}>
+      <Dialog header="Required FIR Items"
+        visible={itemsDialogVisible}
+        style={{ width: '50vw' }}
+        onHide={() => { if (!itemsDialogVisible) return; setItemsDialogVisible(false); }}
+        closeOnEscape='true'
+        dismissableMask
+      >
           <div className="m-0">
             {[...selectedQuestItems.entries()].map(([name, count]) => (
                 <div key={name}>

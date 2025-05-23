@@ -1,10 +1,13 @@
+/* eslint-disable no-unused-vars */
 import { useLazyQuery } from '@apollo/client';
 import { Button } from 'primereact/button';
-import { Menubar } from 'primereact/menubar';
 import { useEffect, useState } from 'react';
+import logo from '../../assets/trackmykappa_white.webp';
 import { Loader } from '../Loader/Loader';
 import { Tracker } from '../Tracker/Tracker';
 import { GET_TASKS } from './../../api/quaries/get-tasks';
+import { About } from './About/About';
+import { TermsOfUse } from './TermsOfUse/TermsOfUse';
         
 
 export const Home = () => {
@@ -13,10 +16,15 @@ export const Home = () => {
     fetchPolicy: 'network-only',
   });
 
+  const [termsOfUseVisible, setTermsOfUseVisible] = useState(false)
+  const [aboutVisible, setAboutVisible] = useState(false)
+
   useEffect(() => {
     const stored = localStorage.getItem('tasks');
     if (stored) {
       setTasks(JSON.parse(stored));
+    } else {
+      loadTasks();
     }
   }, []);
 
@@ -38,43 +46,80 @@ export const Home = () => {
     loadTasks();
   }
 
-  const start = <span>Kappa Tracker</span>
-  const end = <Button
-    icon="pi pi-refresh"
-    rounded
-    text
-    raised
-    aria-label="Reload"
-    onClick={handleReload}
-    tooltip="Reload Task Data"
-    tooltipOptions={{ position: 'left' }}
-  />
-
   return (
-    <div className='relative' style={{height: '100vh'}}>
-      <div className='wipe-button'>
-        <Button
-          icon="pi pi-trash"
-          severity="danger"
-          rounded
-          text
-          raised
-          aria-label="Reload"
-          onClick={handleWipe}
-          tooltip="Wipe!"
-          tooltipOptions={{ position: 'left' }}
-        />
+    <div className='relative'>
+      <div className='navbar'>
+        <div className="img-container">
+          <img src={logo} alt="Track My Kappa" />
+        </div>
+        <div className="reload-button">
+          <Button
+            icon="pi pi-refresh"
+            rounded
+            text
+            raised
+            aria-label="Reload"
+            onClick={handleReload}
+            tooltip="Reload Task Data"
+            tooltipOptions={{ position: 'bottom' }}
+          />
+        </div>
       </div>
-      <Menubar start={start} end={end} />
-      <div
-         className="container"
-      >
+      <div className="container">
         {!loading ? (
           <div className="col-12">
             <Tracker tasks={tasks} />
           </div>
         ) : <Loader /> }
       </div>
+      <div className="footer">
+        <div className='flex align-items-center justify-content-between w-full'>
+          <div>
+            <Button
+              label="Terms of Use"
+              severity="success"
+              text
+              className='ml-2'
+              onClick={() => setTermsOfUseVisible(true)}
+            />
+            <Button
+              label="About"
+              severity="info"
+              text
+              className='ml-2'
+              onClick={() => setAboutVisible(true)}
+            />
+          </div>
+
+          <div className='center'>
+            &copy;{new Date().getFullYear()} Track My Kappa. <br />
+            Game content and materials are trademarks and copyrights of Battlestate Games and its licensors. All rights reserved
+          </div>
+          
+          <div className='wipe-button'>
+            <Button
+              icon="pi pi-trash"
+              severity="danger"
+              rounded
+              text
+              raised
+              aria-label="Reload"
+              onClick={handleWipe}
+              tooltip="Wipe!"
+              tooltipOptions={{ position: 'left' }}
+            />
+          </div>
+        </div>
+        
+      </div>
+      <TermsOfUse
+        termsOfUseVisible={termsOfUseVisible}
+        setTermsOfUseVisible={setTermsOfUseVisible}
+      />
+      <About
+        aboutVisible={aboutVisible}
+        setAboutVisible={setAboutVisible}
+      />
     </div>
   );
 };
