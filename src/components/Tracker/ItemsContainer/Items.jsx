@@ -6,6 +6,7 @@ export const ItemsContainer = ({
   tasks,
   selectedTasks,
   kappaCompletion,
+  lightKeeperCompletion,
   onlyKappa,
   onlyLightKeeper,
   hideComplete,
@@ -23,6 +24,10 @@ export const ItemsContainer = ({
       <div className='mt-3 mb-3'>
         <div className='mb-2'>Kappa Progress: {kappaCompletion.toFixed(2)}%</div>
         <ProgressBar value={kappaCompletion.toFixed(2)} />
+      </div>
+      <div className='mt-3 mb-3'>
+        <div className='mb-2'>Lightkeeper Progress: {lightKeeperCompletion.toFixed(2)}%</div>
+        <ProgressBar value={lightKeeperCompletion.toFixed(2)} />
       </div>
       <div className='flex align-items-center justify-content-between'>
         <div className='flex align-items-center gap-2'>

@@ -10,6 +10,7 @@ export const Tracker = ({
   const [traders, setTraders] = useState([])
   const [selectedTasks, setSelectedTasks] = useState(null);
   const [kappaCompletion, setKappaCompletion] = useState(0)
+  const [lightkeerpCompletion, setLightkeeperCompletion] = useState(0);
 
   const [onlyKappa, setOnlyKappa] = useState(null)
   const [onlyLightKeeper, setOnlyLightkeeper] = useState(null)
@@ -34,6 +35,7 @@ export const Tracker = ({
   useEffect(() => {
     if (selectedTasks) {
       kappaProgress(selectedTasks);
+      lightKeeperProgress(selectedTasks);
     }
   }, [selectedTasks]);
 
@@ -80,6 +82,14 @@ export const Tracker = ({
     const percentageCompleted = (totalCompletedKappaTasks / totalKappaTasks) * 100
 
     setKappaCompletion(percentageCompleted)
+  }
+
+  function lightKeeperProgress(completedTasks) {
+    const totalKappaTasks = tasks.filter((task) => task.kappaRequired)?.length;
+    const totalCompletedLightKeeperTasks = completedTasks.filter((task) => task.lightkeeperRequired)?.length;
+    const percentageCompleted = (totalCompletedLightKeeperTasks / totalKappaTasks) * 100
+
+    setLightkeeperCompletion(percentageCompleted)
   }
 
   function handleItemsButtonClick(items) {
@@ -160,6 +170,7 @@ export const Tracker = ({
             tasks={tasks}
             selectedTasks={selectedTasks}
             kappaCompletion={kappaCompletion}
+            lightKeeperCompletion={lightkeerpCompletion}
             onlyKappa={onlyKappa}
             onlyLightKeeper={onlyLightKeeper}
             hideComplete={hideComplete}
