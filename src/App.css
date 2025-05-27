@@ -45,3 +45,18 @@ img {
   padding: 20px;
   margin-top: 50px;
 }
+.black-background .p-tabview-panels {
+  background-color: #121212;
+}
+
+.regular .p-tabview-panels {
+  background-color: #202938;
+}
+
+.p-tabview-panels {
+  background-color: #202938;
+}
+
+.hideout-items {
+  margin-top: 80px;
+}

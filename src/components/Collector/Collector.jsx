@@ -1,5 +1,4 @@
-import { Card } from "primereact/card"
-import { useEffect, useState } from "react"
+import { useState } from "react";
 
 export const Collector = ({ collector }) => {
 

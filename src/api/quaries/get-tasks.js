@@ -31,5 +31,20 @@ export const GET_TASKS = gql`
         }
       }
     }
+    hideoutStations {
+      id
+      name
+      levels {
+        id
+        level
+        itemRequirements {
+          count
+          item {
+            image512pxLink
+            name
+          }
+        }
+      }
+    }
   }
-`
+`;

@@ -23,11 +23,11 @@ export const Tabs = ({
   const [taskName, setTaskName] = useState('')
   const [activeIndex, setActiveIndex] = useState(0);
   
-
   return (
     <TabView
       scrollable
       activeIndex={activeIndex}
+      className="regular"
       onTabChange={(e) => {
         setActiveIndex(e.index);
         setTaskName('');
@@ -81,7 +81,7 @@ export const Tabs = ({
               <DataTable
                 selection={selectedTasks}
                 onSelectionChange={(e) => handleSelectTask(e.value)} dataKey="id"
-                tableStyle={{ minWidth: '50rem' }}
+                // tableStyle={{ minWidth: '50rem' }}
                 value={traderTasks}
                 showSelectAll={false}
                 scrollable

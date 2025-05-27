@@ -12,6 +12,7 @@ import { TermsOfUse } from './TermsOfUse/TermsOfUse';
 
 export const Home = () => {
   const [tasks, setTasks] = useState([]);
+  const [hideout, setHideout] = useState([])
   const [loadTasks, { called, loading, data }] = useLazyQuery(GET_TASKS, {
     fetchPolicy: 'network-only',
   });
@@ -20,9 +21,11 @@ export const Home = () => {
   const [aboutVisible, setAboutVisible] = useState(false)
 
   useEffect(() => {
-    const stored = localStorage.getItem('tasks');
-    if (stored) {
-      setTasks(JSON.parse(stored));
+    const storedTasks = localStorage.getItem('tasks');
+    const storedHideout = localStorage.getItem('hideout');
+    if (storedTasks && storedHideout) {
+      setTasks(JSON.parse(storedTasks));
+      setHideout(JSON.parse(storedHideout));
     } else {
       loadTasks();
     }
@@ -33,11 +36,16 @@ export const Home = () => {
       setTasks(data.tasks);
       localStorage.setItem('tasks', JSON.stringify(data.tasks));
     }
+    if (data?.hideoutStations) {
+      setHideout(data.hideoutStations)
+      localStorage.setItem('hideout', JSON.stringify(data.hideoutStations))
+    }
   }, [data]);
 
 
   function handleReload() {
     localStorage.removeItem('tasks');
+    localStorage.removeItem('hideout');
     loadTasks();
   }
 
@@ -68,7 +76,10 @@ export const Home = () => {
       <div className="container">
         {!loading ? (
           <div className="col-12">
-            <Tracker tasks={tasks} />
+            <Tracker
+              tasks={tasks}
+              hideout={hideout}
+            />
           </div>
         ) : <Loader /> }
       </div>

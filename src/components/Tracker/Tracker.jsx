@@ -3,9 +3,12 @@ import { Dialog } from 'primereact/dialog';
 import { useEffect, useState } from "react";
 import { ItemsContainer } from './ItemsContainer/Items';
 import { Tabs } from './Tabs/Tabs';
+import { TabPanel, TabView } from 'primereact/tabview';
+import { Hideout } from './Hideout/Hideout';
         
 export const Tracker = ({
-  tasks
+  tasks,
+  hideout
 }) => {
   const [traders, setTraders] = useState([])
   const [selectedTasks, setSelectedTasks] = useState(null);
@@ -19,10 +22,12 @@ export const Tracker = ({
   const [itemsDialogVisible, setItemsDialogVisible] = useState(false)
   const [selectedQuestItems, setSelectedQuestItems] = useState([])
 
-  useEffect(() => {
-    const stored = loadSelectedTasks()
-    if (stored) setSelectedTasks(stored);
+  
+  
 
+  useEffect(() => {
+    const storedTasks = loadSelectedTasks()
+    if (storedTasks) setSelectedTasks(storedTasks);
     createTabs();
   }, [tasks])
 
@@ -45,9 +50,11 @@ export const Tracker = ({
     localStorage.setItem('hideComplete', hideComplete)
   }, [onlyKappa, onlyLightKeeper, hideComplete])
 
+  
+
   function handleSelectTask(value) {
-    localStorage.setItem('selectedTasks', JSON.stringify(value));
     setSelectedTasks(value);
+    localStorage.setItem('selectedTasks', JSON.stringify(value))
   }
 
   function createTabs() {    
@@ -75,6 +82,7 @@ export const Tracker = ({
       return null;
     }
   }
+
 
   function kappaProgress(completedTasks) {
     const totalKappaTasks = tasks.filter((task) => task.kappaRequired)?.length;
@@ -149,52 +157,70 @@ export const Tracker = ({
 
   return (
     <div>
-      <div className="grid mt-5 card">
-        <div className="lg:col-8 md:col-12 card">
-          <Tabs
-            traders={traders}
-            onlyKappa={onlyKappa}
-            onlyLightKeeper={onlyLightKeeper}
-            hideComplete={hideComplete}
-            selectedTasks={selectedTasks}
-            handleSelectTask={handleSelectTask}
-            wikiLink={WikiLink}
-            neededItemsColumn={NeededItemsColumn}
-            lightKeeperColumn={LightKeeperColumn}
-            kappaColumn={KappaColumn}
-            tasks={tasks}
-          />
-        </div>
-        <div className="lg:col-4 md:col-12">
-          <ItemsContainer
-            tasks={tasks}
-            selectedTasks={selectedTasks}
-            kappaCompletion={kappaCompletion}
-            lightKeeperCompletion={lightkeerpCompletion}
-            onlyKappa={onlyKappa}
-            onlyLightKeeper={onlyLightKeeper}
-            hideComplete={hideComplete}
-            setOnlyKappa={setOnlyKappa}
-            setOnlyLightkeeper={setOnlyLightkeeper}
-            setHideComplete={setHideComplete}
-          />
-        </div>
-      </div>
-      <Dialog header="Required FIR Items"
-        visible={itemsDialogVisible}
-        style={{ width: '50vw' }}
-        onHide={() => { if (!itemsDialogVisible) return; setItemsDialogVisible(false); }}
-        closeOnEscape='true'
-        dismissableMask
+      <TabView
+        className='black-background'
       >
-          <div className="m-0">
-            {[...selectedQuestItems.entries()].map(([name, count]) => (
-                <div key={name}>
-                  {count}x {name} 
-                </div>
-              ))}
+        <TabPanel
+          key={1}
+          header='Tasks'
+        >
+          <div className="grid mt-5 card">
+            <div className="lg:col-8 md:col-12 card">
+              <Tabs
+                traders={traders}
+                onlyKappa={onlyKappa}
+                onlyLightKeeper={onlyLightKeeper}
+                hideComplete={hideComplete}
+                selectedTasks={selectedTasks}
+                handleSelectTask={handleSelectTask}
+                wikiLink={WikiLink}
+                neededItemsColumn={NeededItemsColumn}
+                lightKeeperColumn={LightKeeperColumn}
+                kappaColumn={KappaColumn}
+                tasks={tasks}
+              />
+            </div>
+            <div className="lg:col-4 md:col-12">
+              <ItemsContainer
+                tasks={tasks}
+                selectedTasks={selectedTasks}
+                kappaCompletion={kappaCompletion}
+                lightKeeperCompletion={lightkeerpCompletion}
+                onlyKappa={onlyKappa}
+                onlyLightKeeper={onlyLightKeeper}
+                hideComplete={hideComplete}
+                setOnlyKappa={setOnlyKappa}
+                setOnlyLightkeeper={setOnlyLightkeeper}
+                setHideComplete={setHideComplete}
+              />
+            </div>
           </div>
-      </Dialog>
+          <Dialog header="Required FIR Items"
+            visible={itemsDialogVisible}
+            style={{ width: '50vw' }}
+            onHide={() => { if (!itemsDialogVisible) return; setItemsDialogVisible(false); }}
+            closeOnEscape='true'
+            dismissableMask
+          >
+              <div className="m-0">
+                {[...selectedQuestItems.entries()].map(([name, count]) => (
+                    <div key={name}>
+                      {count}x {name} 
+                    </div>
+                  ))}
+              </div>
+          </Dialog>
+        </TabPanel>
+        <TabPanel
+          key={2}
+          header='Hideout'
+        >
+          <Hideout
+            hideout={hideout}
+          /> 
+        </TabPanel>
+      </TabView>
+      
     </div>
   )
 }
