@@ -30,7 +30,12 @@ export const Hideout = ({
   }, [hideout])
 
   useEffect(() => {
-    localStorage.setItem('hideComplete', hideComplete)
+    console.log('get hide complete')
+    setHideComplete(localStorage.getItem('hideCompleteHideout') === 'true');
+  }, [])
+
+  useEffect(() => {
+    localStorage.setItem('hideCompleteHideout', String(hideComplete));
   }, [hideComplete])
 
   useEffect(() => {
@@ -86,7 +91,7 @@ export const Hideout = ({
         count: data.count,
         img: data.img,
       }))
-      .filter(item => !blacklist.has(item.name)); // <- exclude unwanted currencies
+      .filter(item => !blacklist.has(item.name));
 
     setHideoutItems([...neededHideoutItems]);
   }

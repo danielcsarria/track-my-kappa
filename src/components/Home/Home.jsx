@@ -104,7 +104,8 @@ export const Home = () => {
 
           <div className='center'>
             &copy;{new Date().getFullYear()} Track My Kappa. <br />
-            Game content and materials are trademarks and copyrights of Battlestate Games and its licensors. All rights reserved
+            Game content and materials are trademarks and copyrights of Battlestate Games and its licensors. All rights reserved <br />
+            Created with the <a href="https://tarkov.dev/" target='_blank'>Tarko Dev API</a>
           </div>
           
           <div className='wipe-button'>
