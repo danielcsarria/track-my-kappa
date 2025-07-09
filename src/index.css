@@ -30,3 +30,6 @@ body {
 .center {
   text-align: center;
 }
+.p-dialog-title {
+  text-transform: capitalize;
+}

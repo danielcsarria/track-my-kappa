@@ -1,6 +1,8 @@
 import { ProgressBar } from "primereact/progressbar"
 import { Items } from "../../Items/Items"
 import { InputSwitch } from "primereact/inputswitch"
+import { FloatLabel } from "primereact/floatlabel"
+import { InputNumber } from "primereact/inputnumber"
 
 export const ItemsContainer = ({ 
   tasks,
@@ -12,8 +14,19 @@ export const ItemsContainer = ({
   hideComplete,
   setOnlyKappa,
   setOnlyLightkeeper,
-  setHideComplete
+  setHideComplete,
+  playerLevel,
+  setPlayerLevel
 }) => {
+  console.log('playerLevel', playerLevel)
+  if (playerLevel > 0) {
+    tasks = tasks.filter((task) => {
+      if (typeof task.minPlayerLevel === 'number') {
+        return playerLevel >= task.minPlayerLevel;
+      }
+      return true;
+    });  
+  }
   return (
     <div className="items-container">
       <Items
@@ -39,6 +52,18 @@ export const ItemsContainer = ({
         <div className='flex align-items-center gap-2'>
           <InputSwitch checked={hideComplete} onChange={(e) => setHideComplete(e.value)} />Hide Complete
         </div>
+      </div>
+      <div className="mt-5 mb-3">
+        <FloatLabel>
+          <InputNumber
+            id="player-number"
+            value={playerLevel}
+            min={0}
+            max={72}
+            showButtons='true'
+            onValueChange={(e) => setPlayerLevel(e.value)} />
+          <label htmlFor="player-number">Player Level</label>
+      </FloatLabel>
       </div>
     </div>
   )

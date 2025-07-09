@@ -8,6 +8,7 @@ import { Tracker } from '../Tracker/Tracker';
 import { GET_TASKS } from './../../api/quaries/get-tasks';
 import { About } from './About/About';
 import { TermsOfUse } from './TermsOfUse/TermsOfUse';
+import { ImportExport } from './ImportExport/ImportExport';
         
 
 export const Home = () => {
@@ -19,6 +20,9 @@ export const Home = () => {
 
   const [termsOfUseVisible, setTermsOfUseVisible] = useState(false)
   const [aboutVisible, setAboutVisible] = useState(false)
+  const [importExportVisible, setImportExportVisible] = useState(false)
+  const [importExport, setImportExport] = useState('')
+  const [importExportData, setImportExportData] = useState('')
 
   useEffect(() => {
     const storedTasks = localStorage.getItem('tasks');
@@ -54,23 +58,75 @@ export const Home = () => {
     loadTasks();
   }
 
+  function getFinishedItems() {
+    const finishedTasks = localStorage.getItem('selectedTasks');
+    const finishedHideout = localStorage.getItem('completedHideoutStation');
+
+    if (finishedTasks || finishedHideout) {
+      setImportExportData(JSON.stringify({
+        tasks: finishedTasks,
+        hideout: finishedHideout
+      }));
+    }
+  }
+
+  function saveImportData(importData) {
+    const { tasks, hideout } = JSON.parse(importData);
+    localStorage.setItem('selectedTasks', tasks);
+    localStorage.setItem('completedHideoutStation', hideout);
+    setImportExportVisible(false)
+    loadTasks()
+  }
+
   return (
     <div className='relative container'>
-      <div className='navbar'>
+      <div className='navbar flex justify-content-between mb-5'>
+        <div></div>
         <div className="img-container">
           <img src={logo} alt="Track My Kappa" />
         </div>
-        <div className="reload-button ml-2">
-          <Button
-            icon="pi pi-refresh"
-            rounded
-            text
-            raised
-            aria-label="Reload"
-            onClick={handleReload}
-            tooltip="Reload Task Data"
-            tooltipOptions={{ position: 'bottom' }}
-          />
+        <div className="flex reload-button">
+          <div className="flex gap-2">
+            <Button
+              icon="pi pi-refresh"
+              rounded
+              text
+              raised
+              aria-label="Reload"
+              onClick={handleReload}
+              tooltip="Reload Task Data"
+              tooltipOptions={{ position: 'bottom' }}
+            />
+            <Button
+              icon="pi pi-file-import"
+              rounded
+              text
+              raised
+              aria-label="Import Data"
+              severity='success'
+              onClick={() => {
+                setImportExportVisible(true);
+                setImportExport('import');
+              }}
+              tooltip="Import Data"
+              tooltipOptions={{ position: 'bottom' }}
+            />
+            <Button
+              icon="pi pi-file-export"
+              rounded
+              text
+              raised
+              severity='danger'
+              aria-label="Export Data"
+              onClick={() => {
+                getFinishedItems();
+                setImportExportVisible(true)
+                setImportExport('export');
+              }}
+              tooltip="Export Data"
+              tooltipOptions={{ position: 'bottom' }}
+            />  
+          </div>
         </div>
       </div>
       <div className="container">
@@ -131,6 +187,13 @@ export const Home = () => {
       <About
         aboutVisible={aboutVisible}
         setAboutVisible={setAboutVisible}
+      />
+      <ImportExport
+        importExportVisible={importExportVisible}
+        setImportExportVisible={setImportExportVisible}
+        importExport={importExport}
+        importExportData={importExportData}
+        saveImportData={saveImportData}
       />
     </div>
   );

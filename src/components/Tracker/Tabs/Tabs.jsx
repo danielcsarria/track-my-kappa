@@ -18,7 +18,8 @@ export const Tabs = ({
   neededItemsColumn,
   lightKeeperColumn,
   kappaColumn,
-  tasks
+  tasks,
+  playerLevel,
 }) => {
   const [taskName, setTaskName] = useState('')
   const [activeIndex, setActiveIndex] = useState(0);
@@ -35,9 +36,18 @@ export const Tabs = ({
     >
       {
         traders.map((trader, index) => {
+          
+          let traderTasks = tasks?.filter((task) => task.trader.name === trader);
 
-          let traderTasks = tasks.filter((task) => task.trader.name === trader);
-
+          if (playerLevel > 0) {
+            traderTasks = traderTasks.filter((task) => {
+              if (typeof task.minPlayerLevel === 'number') {
+                return playerLevel >= task.minPlayerLevel;
+              }
+              return true;
+            });  
+          }
+          
           if (onlyKappa) {
             traderTasks = traderTasks.filter((task) => task.kappaRequired);
           }

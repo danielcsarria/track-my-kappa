@@ -38,7 +38,7 @@ export const About = ({
       </p>
 
       <p>
-        PS: Plz unban me Burnt Peanut
+        PS: Thank you for unbanning Mr. Peanut. Also, stop cheating at chess Dr. Lupo
       </p>
 
       <BuyMeACoffee />

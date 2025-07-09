@@ -5,6 +5,7 @@ export const GET_TASKS = gql`
     tasks {
       id
       name
+      minPlayerLevel
       trader {
         name
         imageLink
@@ -45,6 +46,10 @@ export const GET_TASKS = gql`
           }
         }
       }
+    }
+    playerLevels {
+      level
+      exp
     }
   }
 `;

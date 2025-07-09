@@ -8,16 +8,17 @@ import { Hideout } from './Hideout/Hideout';
         
 export const Tracker = ({
   tasks,
-  hideout
+  hideout,
 }) => {
   const [traders, setTraders] = useState([])
   const [selectedTasks, setSelectedTasks] = useState(null);
   const [kappaCompletion, setKappaCompletion] = useState(0)
   const [lightkeerpCompletion, setLightkeeperCompletion] = useState(0);
 
-  const [onlyKappa, setOnlyKappa] = useState(null)
-  const [onlyLightKeeper, setOnlyLightkeeper] = useState(null)
-  const [hideComplete, setHideComplete] = useState(null)
+  const [onlyKappa, setOnlyKappa] = useState(null);
+  const [onlyLightKeeper, setOnlyLightkeeper] = useState(null);
+  const [hideComplete, setHideComplete] = useState(null);
+  const [playerLevel, setPlayerLevel] = useState(null);
 
   const [itemsDialogVisible, setItemsDialogVisible] = useState(false)
   const [selectedQuestItems, setSelectedQuestItems] = useState([])
@@ -35,6 +36,7 @@ export const Tracker = ({
     setOnlyKappa(localStorage.getItem('onlyKappa') === 'true');
     setOnlyLightkeeper(localStorage.getItem('onlyLightKeeper') === 'true');
     setHideComplete(localStorage.getItem('hideComplete') === 'true');
+    setPlayerLevel(localStorage.getItem('playerLevel'));
   }, [])
 
   useEffect(() => {
@@ -48,7 +50,8 @@ export const Tracker = ({
     localStorage.setItem('onlyKappa', onlyKappa)
     localStorage.setItem('onlyLightKeeper', onlyLightKeeper)
     localStorage.setItem('hideComplete', hideComplete)
-  }, [onlyKappa, onlyLightKeeper, hideComplete])
+    localStorage.setItem('playerLevel', playerLevel)
+  }, [onlyKappa, onlyLightKeeper, hideComplete, playerLevel])
 
   
 
@@ -101,7 +104,6 @@ export const Tracker = ({
   }
 
   function handleItemsButtonClick(items) {
-    console.log('items', items)
     setItemsDialogVisible(true)
     setSelectedQuestItems(items)
   }
@@ -178,6 +180,7 @@ export const Tracker = ({
                 lightKeeperColumn={LightKeeperColumn}
                 kappaColumn={KappaColumn}
                 tasks={tasks}
+                playerLevel={playerLevel}
               />
             </div>
             <div className="lg:col-4 md:col-12">
@@ -192,6 +195,8 @@ export const Tracker = ({
                 setOnlyKappa={setOnlyKappa}
                 setOnlyLightkeeper={setOnlyLightkeeper}
                 setHideComplete={setHideComplete}
+                playerLevel={playerLevel}
+                setPlayerLevel={setPlayerLevel}
               />
             </div>
           </div>
